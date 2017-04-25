@@ -29,13 +29,7 @@ class Notifier: NSObject, NotifyingProtocol {
 
     func addScreenTagNotification() {
         NotificationCenter.default.addObserver(self, selector:#selector(handleLaunch) ,
-                                               name:NSNotification.Name.UIApplicationWillEnterForeground,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(handleLaunch) ,
                                                name:NSNotification.Name.UIApplicationDidBecomeActive,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(handleInactivity) ,
-                                               name:NSNotification.Name.UIApplicationWillResignActive,
                                                object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(handleInactivity) ,
                                                name:NSNotification.Name.UIApplicationDidEnterBackground,
@@ -43,9 +37,7 @@ class Notifier: NSObject, NotifyingProtocol {
     }
 
     func removeScreenTagNotification() {
-        NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationWillEnterForeground)
         NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationDidBecomeActive)
-        NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationWillResignActive)
         NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationDidEnterBackground)
     }
 }
