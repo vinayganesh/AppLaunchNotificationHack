@@ -13,13 +13,22 @@ protocol NotifyingProtocol {
     func removeScreenTagNotification()
 }
 
-class Notifier: NSObject, NotifyingProtocol {
-    var isScreenAlreadyTagged = false
+class Notifier: NotifyingProtocol {
+    private var isScreenAlreadyTagged = false
+    private let DID_BECOME_ACTIVE = Notification.Name.UIApplicationDidBecomeActive
+    private let DID_ENTER_BACKGROUND = Notification.Name.UIApplicationDidEnterBackground
+    private var localStorage: LocalStorageProtocol!
+
+    init(localStorage: LocalStorageProtocol = LocalStorage()) {
+        self.localStorage = localStorage
+    }
 
     @objc private func handleLaunch() {
         if !isScreenAlreadyTagged {
             print("Screen tag goes here!")
+            localStorage.counter = localStorage.counter + 1
             isScreenAlreadyTagged = true
+            print("screen lauch count is \(localStorage.counter)")
         }
     }
 
@@ -29,15 +38,15 @@ class Notifier: NSObject, NotifyingProtocol {
 
     func addScreenTagNotification() {
         NotificationCenter.default.addObserver(self, selector:#selector(handleLaunch) ,
-                                               name:NSNotification.Name.UIApplicationDidBecomeActive,
+                                               name:DID_BECOME_ACTIVE,
                                                object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(handleInactivity) ,
-                                               name:NSNotification.Name.UIApplicationDidEnterBackground,
+                                               name:DID_ENTER_BACKGROUND,
                                                object: nil)
     }
 
     func removeScreenTagNotification() {
-        NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationDidBecomeActive)
-        NotificationCenter.default.removeObserver(NSNotification.Name.UIApplicationDidEnterBackground)
+        NotificationCenter.default.removeObserver(DID_BECOME_ACTIVE)
+        NotificationCenter.default.removeObserver(DID_ENTER_BACKGROUND)
     }
 }

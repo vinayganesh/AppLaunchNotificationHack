@@ -9,7 +9,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-
     var notifier: NotifyingProtocol!
 
     override func viewDidLoad() {
